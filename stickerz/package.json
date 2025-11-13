@@ -20,6 +20,7 @@
 	},
 	"dependencies": {
 		"@neodrag/svelte": "^2.3.3",
+		"pica": "^9.0.1",
 		"textfit": "^2.4.0",
 		"uuid": "^13.0.0"
 	}
