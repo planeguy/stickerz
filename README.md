@@ -14,6 +14,6 @@ single html sticky notes
 1. don't lose your work on miro
 
 ## build
-it's a simple sveltekit app so really all you gotta do is clone and npm install.
+it's a simple sveltekit app so really all you gotta do is clone, npm install then npm run build.
 
 __a bug in svelte kit:__ as of 2025-11-12, you'll get more than just the index.html in the build folder, but they never get used... so you can safely ignore them. small comfort if you don't know that and think there's something wrong. but now you know and can relax with a nice cup of chai tea.
