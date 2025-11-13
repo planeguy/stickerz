@@ -14,16 +14,17 @@
     let spacecontainer = $state();
     let spaceelem = $state();
     let fileinput;
+    let newest=$state();
 
     function addSticker(x,y,colour){
-        stickers.push(new StickerData({x,y,colour,size:defaultSize,text:'new'}))  
+        newest = new StickerData({x,y,colour,size:defaultSize,text:'new'});
+        stickers.push(newest);
     }
 
     function handleAddButton(e){
         const newNoteX = (spacecontainer.scrollLeft+((spacecontainer.offsetWidth-defaultSize)/2));
         const newNoteY = (spacecontainer.scrollTop+((spacecontainer.offsetHeight-defaultSize)/2));
-        const colour=e.currentTarget.dataset.colour;
-        console.log(colour);
+        const colour = e.currentTarget.dataset.colour;
         addSticker(newNoteX, newNoteY, colour)
     }
 
@@ -46,6 +47,10 @@
 
     function handleSpaceScroll(e){
         const tgt=e.currentTarget;
+    }
+
+    function dirtySticker(){
+        newest=null;
     }
 
     onMount(()=>{
@@ -92,7 +97,7 @@
         bind:this={spaceelem}
         >
         {#each stickers as s,i }
-            <Sticker bind:sticker={stickers[i]} deletefn={deleteSticker} ></Sticker> 
+            <Sticker bind:sticker={stickers[i]} deletefn={deleteSticker} changefn={dirtySticker} isnew={s==newest}></Sticker> 
         {/each}
     </div>
 </div>

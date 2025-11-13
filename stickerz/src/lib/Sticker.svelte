@@ -1,15 +1,27 @@
 <script>
+import { onMount } from "svelte";
 import { draggable } from "@neodrag/svelte";
 import textFit from "textfit"; 
 
-let {sticker=$bindable(), deletefn} = $props();
-
+let {sticker=$bindable(), deletefn, isnew, changefn} = $props();
 const sizeUnit = "px"
+
+let ta;
 
 function handleDelete(e){
     deletefn(sticker);
 }
 
+function handleTextChange(e){
+    changefn();
+}
+
+onMount(()=>{
+    if(isnew){
+        ta.focus();
+        ta.select();
+    }
+});
 </script>
 
 
@@ -33,7 +45,9 @@ function handleDelete(e){
             style:height="{sticker.size}{sizeUnit}"
             style:background-color={sticker.colour}
             bind:value={sticker.text}
+            bind:this={ta}
             style:resize=none style:border=none style:outline=none
+            onchange={handleTextChange}
             >
         </textarea> 
         {#if deletefn}
