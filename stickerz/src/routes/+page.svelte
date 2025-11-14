@@ -13,7 +13,8 @@
     let stickers = $state([]);
     let spacecontainer = $state();
     let spaceelem = $state();
-    let fileinput;
+
+    let spacefileinput, spacefilename;
     let newest=$state();
 
     function addSticker(x,y,colour){
@@ -35,14 +36,18 @@
 
     function handleSaveSpace(e){
         const save = ($state.snapshot(stickers));
-        saveSpace(save,fileinput.files[0]?.name)
+        saveSpace(save,spacefilename)
     }
 
+    function handleLoadSpaceButton(e){
+        spacefileinput.click();
+    }
     async function handleLoadSpace(e){
         const chooser = e.currentTarget;
         const file = chooser.files[0]
         const space = await loadSpace(file);
         stickers = space;
+        spacefilename=file.name;
     }
 
     function handleSpaceScroll(e){
@@ -85,7 +90,12 @@
             >&nbsp;</button>  
     {/each}
      <button onclick="{handleSaveSpace}">SAVE</button>
-     <input type="file" multiple="false" onchange="{handleLoadSpace}" bind:this={fileinput}/>
+     <button onclick="{handleLoadSpaceButton}">LOAD</button>
+     <input 
+        hidden
+        type="file" multiple="false"
+        onchange="{handleLoadSpace}" 
+        bind:this={spacefileinput}/>
 </div>
 <div 
     bind:this={spacecontainer}
@@ -109,14 +119,18 @@
 </div>
 
 <style>
+    button {
+        margin: 0;
+        border: solid black 1px;
+    }
     .dotgrid {
-  --dot-bg: #FAF9F6;
-  --dot-color: black; /*#6F8FAF;*/
-  --dot-size: 1px;
-  --dot-space: 22px;
-	background:
-		linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
-		linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
-		var(--dot-color);
-}
+        --dot-bg: #FAF9F6;
+        --dot-color: black; /*#6F8FAF;*/
+        --dot-size: 1px;
+        --dot-space: 22px;
+        background:
+            linear-gradient(90deg, var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+            linear-gradient(var(--dot-bg) calc(var(--dot-space) - var(--dot-size)), transparent 1%) center / var(--dot-space) var(--dot-space),
+            var(--dot-color);
+    }
 </style>
