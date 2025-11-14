@@ -8,14 +8,15 @@
     const availableColors=[
         "#FFF8D5","#E6AAD2","#D5F6FB","#D0E9C0","#F8C57C"
     ]
-    const spacesize = "1000cm";
-
     let stickers = $state([]);
+    let newest=$state();
+
+    const spacesize = "1000cm";
     let spacecontainer = $state();
     let spaceelem = $state();
-
     let spacefileinput, spacefilename;
-    let newest=$state();
+
+    let imagefileinput;
 
     function addSticker(x,y,colour){
         newest = new StickerData({x,y,colour,size:defaultSize,text:'new'});
@@ -27,6 +28,13 @@
         const newNoteY = (spacecontainer.scrollTop+((spacecontainer.offsetHeight-defaultSize)/2));
         const colour = e.currentTarget.dataset.colour;
         addSticker(newNoteX, newNoteY, colour)
+    }
+
+    function handleAddImageButton(e){
+        imagefileinput.onclick = (ev)={
+            
+        }
+        imagefileinput.click();
     }
 
     function deleteSticker(stk){
@@ -89,9 +97,19 @@
             onkeypress="{handleAddButton}"
             >&nbsp;</button>  
     {/each}
-     <button onclick="{handleSaveSpace}">SAVE</button>
-     <button onclick="{handleLoadSpaceButton}">LOAD</button>
-     <input 
+    <button
+        style:width=30px
+        style:height=30px
+        onclick="{handleAddImageButton}"
+        onkeypress="{handleAddImageButton}"
+        >&nbsp;</button>  
+    <input 
+        hidden
+        type="file" multiple="false"
+        bind:this={imagefileinput}/>
+    <button onclick="{handleSaveSpace}">SAVE</button>
+    <button onclick="{handleLoadSpaceButton}">LOAD</button>
+    <input 
         hidden
         type="file" multiple="false"
         onchange="{handleLoadSpace}" 
