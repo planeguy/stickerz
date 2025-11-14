@@ -56,7 +56,13 @@
     onMount(()=>{
         spacecontainer.scrollLeft=(spaceelem.offsetWidth/2)-(spacecontainer.offsetWidth/2);
         spacecontainer.scrollTop=(spaceelem.offsetHeight/2)-(spacecontainer.offsetHeight/2);
-        console.log(spacecontainer.scrollLeft, spacecontainer.scrollTop);
+
+        document.addEventListener('keydown',(e)=>{
+            if(e.ctrlKey && e.key=='s'){
+                e.preventDefault(); e.stopPropagation();
+                handleSaveSpace();
+            }
+        })
     });
 </script>
 <div 
