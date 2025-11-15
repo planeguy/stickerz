@@ -3,6 +3,7 @@
     import { loadSpace, saveSpace } from "$lib/space";
     import Sticker from "$lib/Sticker.svelte";
     import { onMount } from "svelte";
+    import { dataUrlFromBlob } from "$lib/images";
 
     const defaultSize=100;
     const availableColors=[
@@ -13,13 +14,12 @@
 
     const spacesize = "1000cm";
 
-    let stickers = $state([]);
     let spacecontainer = $state();
     let spaceelem = $state();
     let spacefileinput, spacefilename;
 
+    const imageSize=defaultSize * 2;
     let imagefileinput;
-
 
     function addSticker(colour, img=null, size=defaultSize){
         const x = (spacecontainer.scrollLeft+((spacecontainer.offsetWidth-size)/2));
@@ -30,27 +30,27 @@
         return n;
     }
 
-    function handleAddButton(e){
-        const newNoteX = (spacecontainer.scrollLeft+((spacecontainer.offsetWidth-defaultSize)/2));
-        const newNoteY = (spacecontainer.scrollTop+((spacecontainer.offsetHeight-defaultSize)/2));
+    function handleAddTextStickerButton(e){
         const colour = e.currentTarget.dataset.colour;
-        addSticker(newNoteX, newNoteY, colour)
+        addSticker(colour)
     }
 
-    function handleAddImgButton(e){
-	imagefileinput.onclick = (ev)={
-            
-        }
-        imagefileinput.click();
-    }
-
-    async function handleSelectImage(e){
-        const chooser = e.currentTarget;
-        const file = chooser.files[0];
-        const colour = '#FFFFFF'
-        const dUrl = await dataUrlFromBlob(file);
-        const chosenSize = imageSize;
-        const n = addSticker(colour, dUrl, chosenSize);
+    async function handleAddImageButton(e){
+        const getImage = new Promise((resolve, reject)=>{
+            imagefileinput.onchange = async (ev)=>{
+                const chooser = ev.currentTarget;
+                const file = chooser.files[0];
+                console.log(chooser, file)
+                const image = await dataUrlFromBlob(file);
+                
+                resolve(image);
+            }
+            imagefileinput.click();
+        }).then(img=>{
+            const colour = '#FFFFFF'
+            const size = imageSize;
+            addSticker(colour,img,size);
+        });
     }
 
     function deleteSticker(stk){
@@ -58,9 +58,8 @@
         stickers.splice(i,1);
     }
 
-    function handleSaveSpace(e){
-        const save = ($state.snapshot(stickers));
-        saveSpace(save,spacefilename)
+    function handleSaveSpaceButton(){
+        saveSpace($state.snapshot(stickers),spacefilename)
     }
 
     function handleLoadSpaceButton(e){
@@ -89,7 +88,7 @@
         document.addEventListener('keydown',(e)=>{
             if(e.ctrlKey && e.key=='s'){
                 e.preventDefault(); e.stopPropagation();
-                handleSaveSpace();
+                saveSpace();
             }
         })
     });
@@ -109,8 +108,8 @@
             style:height=30px
             style:background-color={c}
             data-colour="{c}"
-            onclick="{handleAddButton}"
-            onkeypress="{handleAddButton}"
+            onclick="{handleAddTextStickerButton}"
+            onkeypress="{handleAddTextStickerButton}"
             >&nbsp;</button>  
     {/each}
     <button
@@ -131,7 +130,7 @@
         hidden
         type="file" multiple="false"
         bind:this={imagefileinput}/>
-    <button onclick="{handleSaveSpace}">SAVE</button>
+    <button onclick="{handleSaveSpaceButton}">SAVE</button>
     <button onclick="{handleLoadSpaceButton}">LOAD</button>
     <input 
         hidden

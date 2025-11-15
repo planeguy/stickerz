@@ -57,6 +57,7 @@ onMount(()=>{
             onchange={handleTextChange}
             >
         </textarea> 
+
         {#if deletefn}
             
         <button onclick={handleDelete}
