@@ -17,7 +17,7 @@ function handleTextChange(e){
 }
 
 onMount(()=>{
-    if(isnew){
+    if(isnew && ta){
         ta.focus();
         ta.select();
     }
@@ -36,14 +36,21 @@ onMount(()=>{
     }
     style:width="{sticker.size}{sizeUnit}"
     style:height="{sticker.size}{sizeUnit}"
+    style:background-color={sticker.colour}
+    style:background-image=url({sticker.img})
+    style:background-repeat=no-repeat
+    style:background-size= cover
+    style:background-position= center;
     style:position=absolute
     style:overflow=hidden
     >
         <textarea
             style:wrap=soft
+            style:top=0 style:left=0
             style:width="{sticker.size}{sizeUnit}"
             style:height="{sticker.size}{sizeUnit}"
-            style:background-color={sticker.colour}
+            style:background-color=rgba(0,0,0,0)
+            style:position=absolute
             bind:value={sticker.text}
             bind:this={ta}
             style:resize=none style:border=none style:outline=none
